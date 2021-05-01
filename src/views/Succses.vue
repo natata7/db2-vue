@@ -1,70 +1,55 @@
 <template>
-  <div id="app">
-      <router-view/>
-    <div id="nav">
-      <router-link to="/">Signup</router-link> |
-      <router-link to="/signin">Signin</router-link> |
-      <router-link to="/complete">Complete</router-link> |
-      <router-link to="/succses">Succses</router-link> |
-      <router-link to="/admin">Admin</router-link> |
-      <router-link to="/profile">Profile</router-link> |
-      <router-link to="/search">Search</router-link>
-    </div>
+  <div class="home">
+    <Header v-bind:signup='false'/>
+    <main class="main pass-recovery__succses">
+        <div class="content">
+            <div class="circle-wrap">
+                <div class="circle-background-1"></div>
+                <div class="circle-background-2"></div>
+                <div class="circle-background-3"></div>
+                <div class="circle-background-4"></div>
+            </div>
+            <div class="content-wrap">
+                <div class="envelope">
+                    <img :src="`${publicPath}images/envelope.svg`"
+                            alt="Envelope"
+                            class="">
+                </div>
+                <div class="message--wrap">
+                    <h1 class="message--title">You are almost ready to go!</h1>
+                    <p class="message--text">Please check your email to activate your account</p>
+                </div>
+            </div>
+        </div>
+    </main>
   </div>
 </template>
 
 <script>
-import store from './services/store';
+// @ is an alias to /src
+import Header from '@/components/header.vue';
 
 export default {
-  name: 'App',
+  name: 'Succses',
   metaInfo: {
-    title: 'Home',
+    title: 'Succses',
     titleTemplate: '%s | DB2 app',
   },
-  created() {
-    if (this.$store.getters.isAuthenticated) {
-      this.$store.dispatch(store.USER_REQUEST);
-    }
+  props: {
+    title: String,
+  },
+  components: {
+    Header,
+  },
+  data() {
+    return {
+      publicPath: process.env.BASE_URL,
+    };
   },
 };
 </script>
 
-<style lang="scss">
-h1,
-h2,
-h3,
-h4,
-h5,
-h6{
-    font-family: $title-font;
-    margin: 0;
-}
-
-p,
-label{
-    color: $text-color;
-}
-
-p{
-    margin: 0;
-}
-
-a{
-    text-decoration: none;
-    color: $color-main;
-    font-weight: 600;
-}
-
-p,
-a,
-label,
-ul li,
-ol li{
-    font-family: $main-font;
-    font-size: $font-size;
-}
-
+<style lang="scss" scoped>
 body {
     background-color: #F9FAFC;
     margin: 0;
@@ -87,7 +72,6 @@ body {
         margin: auto;
     }
 }
-
 .envelope,
 .message--wrap{
     position: relative;
@@ -95,7 +79,6 @@ body {
     width: fit-content;
     z-index: 100;
 }
-
 .pass-recovery__succses{
     h1,
     p{
@@ -109,7 +92,9 @@ body {
         font-size: 58px;
         line-height: 34px;
         letter-spacing: 0.4px;
-        color: $color-main;
+        color: #2A74DB;
+        margin: 30px 0;
+;
     }
 
     .message--text{
@@ -187,17 +172,6 @@ body {
     }
     100% {
         opacity: .54;
-    }
-}
-
-.main-left{
-    margin-left: 80px;
-}
-#nav{
-    text-align: center;
-
-    a{
-        font-weight: 400;
     }
 }
 </style>
