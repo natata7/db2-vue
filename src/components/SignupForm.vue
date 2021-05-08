@@ -2,7 +2,7 @@
 <main class="main">
         <section class="form-window">
             <h1 class="form-window__title">Sign up</h1>
-            <form action="/add" method="post">
+            <form method="post">
                 <div class="input-wrap__row">
                     <cInput
                     id="name"
@@ -21,7 +21,7 @@
                     id="username"
                     type="username"
                     v-model="username"
-                    v-on:change-my-input="getEmail"
+                    v-on:change-my-input="getUsername"
                     placeholder="Username" />
                 <cInput
                     id="email"
@@ -32,7 +32,7 @@
                 <div class="button">
                     <div class="button__wrap">
                         <button
-                        @click="onSubmit"
+                        @click.prevent="onSubmit"
                         class="submit"
                         title="Get started"
                         >Get started</button>
@@ -46,8 +46,8 @@
 <script>
 import cInput from '@/components/input.vue';
 // import cButton from '@/components/button.vue';
-import apiService from '../services/api';
-import router from '../router';
+// import apiService from '../services/api';
+// import router from '../router';
 
 export default {
   name: 'signup',
@@ -67,32 +67,40 @@ export default {
     };
   },
   methods: {
-    async onSubmit(e) {
-      e.preventDefault();
-      await apiService.post('/add', this.data)
-        .then((res) => {
-          console.log(res.data);
-          this.$router.push('/signup-complete');
-        })
-        .catch((err) => {
-          alert(err.response.data);
-        });
-      console.log(this.fname, this.lname, this.username, this.email);
+    async onSubmit() {
       const user = {
         fname: this.fname,
         lname: this.lname,
         username: this.username,
         email: this.email,
       };
-      window.localStorage.setItem('user', JSON.stringify(user));
-      console.log(window.localStorage.getItem('user'));
-      router.push('/signup-complete');
+      console.log(user);
+      this.$store.commit('userInfo', {
+        fname: this.fname,
+        lname: this.lname,
+        username: this.username,
+        email: this.email,
+      });
+      this.$router.push('/signup-complete');
+      //   await apiService.post('/add', user)
+      //     .then((res) => {
+      //       console.log(res);
+      //       this.$router.push('/signup-complete');
+      //     })
+      //     .catch((err) => {
+      //       alert(err.response.data);
+      //     });
+      // window.localStorage.setItem('user', JSON.stringify(user));
+      // console.log(window.localStorage.getItem('user'));
     },
     getName(data) {
       this.fname = data;
     },
     getSurname(data) {
       this.lname = data;
+    },
+    getUsername(data) {
+      this.username = data;
     },
     getEmail(data) {
       this.email = data;

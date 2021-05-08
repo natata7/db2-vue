@@ -2,23 +2,26 @@
     <main class="main">
         <section class="form-window">
             <h1 class="form-window__title">Sign in</h1>
-            <form action="">
+            <form action="post">
                 <cInput
                 type="email"
                 name="email"
                 id="email"
                 v-model="email"
-                v-on:change-my-input="getEmail" />
+                v-on:change-my-input="getEmail"
+                placeholder="Your email" />
                 <cInput
                 type="password"
                 name="password"
                 id="password"
                 v-model="password"
-                v-on:change-my-input="getPassword"/>
+                v-on:change-my-input="getPassword"
+                placeholder="Your password"/>
                 <a class="pass-recovery" href="./pass-recovery.html">Forgot password?</a>
                 <div class="button">
                     <div class="button__wrap">
-                        <button class="submit" type="submit">Sign in</button>
+                        <button @click.prevent="login"
+                        class="submit" type="submit">Sign in</button>
                     </div>
                 </div>
             </form>
@@ -27,7 +30,8 @@
 </template>
 
 <script>
-// import Input from '@/components/input.vue';
+import cInput from '@/components/input.vue';
+import apiService from '../services/api';
 import store from '../services/store';
 
 export default {
@@ -36,6 +40,7 @@ export default {
 
   },
   components: {
+    cInput,
   },
   data() {
     return {
@@ -44,10 +49,31 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
+      // const user = this.$store.getters.accountInfo;
+      await apiService.post('/auth', {
+        email: this.email,
+        password: this.password,
+      })
+        .then(
+          (response) => {
+            const { accessToken, refreshToken } = response.data;
+            this.$store
+              .dispatch('login', {
+                account: response.data.user,
+                tokens: {
+                  access: accessToken,
+                  refresh: refreshToken,
+                },
+              })
+              .then(() => this.$router.replace(this.$route.query.redirect || '/profile'));
+          },
+        );
+    },
+    login1() {
       const { email, password } = this;
       this.$store.dispatch(store.AUTH_REQUEST, { email, password }).then(() => {
-        this.$router.push('/');
+        this.$router.push('/profile');
       });
     },
     getEmail(data) {

@@ -6,18 +6,26 @@
     </div>
 
     <div class="nav-bar">
-        <div class="nav-bar__item search" v-bind:class="{active: searchActive}">
-            <img :src="`${publicPath}images/search-icon.svg`" alt="Search">
-        </div>
-        <div class="nav-bar__item profile" v-bind:class="{active: profileActive}">
-            <img :src="`${publicPath}images/profile-icon.svg`" alt="Profile">
-        </div>
-        <div class="nav-bar__item messages" v-bind:class="{active: messagesActive}">
-            <img :src="`${publicPath}images/messages-icon.svg`" alt="Messages">
-        </div>
-        <div class="nav-bar__item calendar" v-bind:class="{active: calendarActive}">
-            <img :src="`${publicPath}images/calendar-icon.svg`" alt="Calendar">
-        </div>
+        <router-link to="/search">
+            <div class="nav-bar__item search" v-bind:class="{active: searchActive}">
+                <img :src="`${publicPath}images/search-icon.svg`" alt="Search">
+            </div>
+        </router-link>
+        <router-link to="/profile">
+            <div class="nav-bar__item profile" v-bind:class="{active: profileActive}">
+                <img :src="`${publicPath}images/profile-icon.svg`" alt="Profile">
+            </div>
+        </router-link>
+        <router-link to="/search">
+            <div class="nav-bar__item messages" v-bind:class="{active: messagesActive}">
+                <img :src="`${publicPath}images/messages-icon.svg`" alt="Messages">
+            </div>
+        </router-link>
+        <router-link to="/search">
+            <div class="nav-bar__item calendar" v-bind:class="{active: calendarActive}">
+                <img :src="`${publicPath}images/calendar-icon.svg`" alt="Calendar">
+            </div>
+        </router-link>
     </div>
 </aside>
 

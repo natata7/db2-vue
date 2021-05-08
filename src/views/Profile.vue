@@ -4,23 +4,35 @@
   <main class="main">
         <section class="information-window">
             <div class="tabs-header">
-                <div class="tabs-header__item active" id="tabs-header__item" data-tab="1">
-                    <h2 class="information-window__title">ACCOUNT INFORMATION</h2>
-                </div>
-                <div class="tabs-header__item" id="tabs-header__item" data-tab="2">
-                    <h2 class="information-window__title active">PERSONAL INFORMATION</h2>
+                <div class="tabs-header__item" id="tabs-header__item" data-tab="1" :class="{
+                active: showInformationTab === informationTab
+                }"
+                v-for="(informationTab, i) in informationTabs"
+                :key="i"
+                @click="showInformationTab = informationTab">
+                    <h2 class="information-window__title">{{ informationTab }} INFORMATION</h2>
                 </div>
             </div>
             <div class="tabs-content" id="tabs-content">
-                <div class="tabs-content__item active" data-tab="1">
+                <div class="tabs-content__item" data-tab="1"
+                v-show="showInformationTab === 'personal'">
                     <div class="personal-photo">
                         <img :src="`${publicPath}images/photo.jpg`" alt="Avatar">
+                        <label for="file" class="edit-link">
                         <div class="edit-link">
                             <img :src="`${publicPath}images/edit-icon.svg`"
                             alt="Edit"
                             class="edit-link__image">
-                            <p>Change photo</p>
+                            Change photo
                         </div>
+                        <input
+                            type="file"
+                            id="file"
+                            accept="image/*"
+                            @change="true"
+                            hidden
+                        />
+                        </label>
                     </div>
                     <form action="">
                         <div class="input-wrap__row">
@@ -56,7 +68,8 @@
                         </div>
                     </form>
                 </div>
-                <div class="tabs-content__item" data-tab="2">
+                <div class="tabs-content__item" data-tab="2"
+                v-show="showInformationTab === 'account'">
                     <form action="">
                         <div class="input-wrap__row">
                             <label for="name">Username</label>
@@ -80,6 +93,7 @@
 <script>
 // @ is an alias to /src
 import Leftbar from '@/components/leftbar.vue';
+import apiService from '../services/api';
 
 export default {
   name: 'Profile',
@@ -95,13 +109,34 @@ export default {
   },
   data() {
     return {
+      informationTabs: ["personal", "account"],
+      showInformationTab: "personal",
       publicPath: process.env.BASE_URL,
     };
   },
   mounted() {
-    const externalScript = document.createElement('script');
-    externalScript.setAttribute('src', 'https://cdn.jsdelivr.net/jquery/latest/jquery.min.js');
-    document.head.appendChild(externalScript);
+    apiService.get('/admin')
+      .then((res) => {
+        this.usersResponse = res;
+        console.log(res);
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  },
+  methods: {
+    async onSubmit(id, index) {
+      console.log(index);
+      await apiService.get(`/admin/${id}/delete/`)
+        .then((res) => {
+          console.log(res);
+          // this.$router.push('/admin');
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
+      this.usersResponse.data.splice(index, 1);
+    },
   },
 };
 </script>
@@ -163,6 +198,7 @@ export default {
 
         h2{
             font-size: $font-size;
+            text-transform: uppercase;
         }
 
         &:hover,
@@ -179,7 +215,8 @@ export default {
 .tabs-content{
     display: flex;
     .tabs-content__item{
-        display: none;
+        display: flex;
+        width: 100%;
 
         &.active{
             display: flex;
@@ -198,6 +235,7 @@ export default {
 
         @media (min-width: $screen-md) {
             width: 80%;
+            margin: auto;
         }
     }
 }
@@ -220,6 +258,8 @@ export default {
         flex-direction: row;
         align-items: center;
         justify-content: center;
+        margin-top: 15px;
+        cursor: pointer;
 
         svg, img.edit-link__image{
             margin: 0;

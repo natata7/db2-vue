@@ -195,6 +195,8 @@ body {
 }
 #nav{
     text-align: center;
+    position: relative;
+    z-index: 1;
 
     a{
         font-weight: 400;

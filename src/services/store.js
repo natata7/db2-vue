@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Vue from 'vue';
 import Vuex from 'vuex';
 import ApiService from './api';
@@ -6,75 +8,54 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    token: localStorage.getItem('user-token') || '',
     status: '',
+    account: {
+      fname: '',
+      lname: '',
+      username: '',
+      email: '',
+    },
+    tokens: {
+      access: localStorage.getItem("accessToken") || "",
+      refresh: localStorage.getItem("refreshToken") || ""
+    },
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
     authStatus: (state) => state.status,
+    loggedIn: (state) => { return Object.keys(state.tokens).filter((key) => !!state.tokens[key]).length },
   },
   mutations: {
-    AUTH_REQUEST: (state) => {
-      state.status = 'loading';
+    updateAccountInfo(state, payload) {
+      state.account = Object.assign(payload);
     },
-    AUTH_SUCCESS: (state, token) => {
-      state.status = 'success';
-      state.token = token;
+    setTokens(state, payload) {
+      state.tokens = Object.assign(payload);
     },
-    AUTH_ERROR: (state) => {
-      state.status = 'error';
-    },
-    USER_REQUEST: (state) => {
-      state.status = 'loading';
-    },
-    USER_SUCCESS: (state, resp) => {
-      state.status = 'success';
-      Vue.set(state, 'profile', resp);
-    },
-    USER_ERROR: (state) => {
-      state.status = 'error';
-    },
-    AUTH_LOGOUT: (state) => {
-      state.profile = {};
-    },
+    pushErrors(state, payload) {
+      state.errors = [...payload];
+    }
   },
-  actions: {
-    AUTH_REQUEST: ({ commit, dispatch }, user) => new Promise((resolve, reject) => {
-      commit(store.AUTH_REQUEST);
-      ApiService({ url: 'auth', data: user, method: 'POST' })
-        .then((resp) => {
-          localStorage.setItem('user-token', resp.token);
-          // Here set the header of your ajax library to the token value.
-          // example with axios
-          // axios.defaults.headers.common['Authorization'] = resp.token
-          commit(store.AUTH_SUCCESS, resp);
-          dispatch(store.USER_REQUEST);
-          resolve(resp);
-        })
-        .catch((err) => {
-          commit(store.AUTH_ERROR, err);
-          localStorage.removeItem('user-token');
-          reject(err);
-        });
-    }),
-    AUTH_LOGOUT: ({ commit }) => new Promise((resolve) => {
-      commit(store.AUTH_LOGOUT);
-      localStorage.removeItem('user-token');
-      resolve();
-    }),
-    USER_REQUEST: ({ commit, dispatch }) => {
-      commit(store.USER_REQUEST);
-      ApiService({ url: 'user/me' })
-        .then((resp) => {
-          commit(store.USER_SUCCESS, resp);
-        })
-        .catch(() => {
-          commit(store.USER_ERROR);
-          // if resp is unauthorized, logout, to
-          dispatch(store.AUTH_LOGOUT);
-        });
+actions: {
+    login({ commit }, payload) {
+      localStorage.setItem("accessToken", payload.tokens.access);
+      localStorage.setItem("refreshToken", payload.tokens.refresh);
+      commit("setTokens", payload.tokens);
+      commit("pushErrors", []);
+      if (payload.account) commit("updateAccountInfo", payload.account);
     },
-  },
+    logout({ commit }) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      commit("setTokens", {});
+      commit("updateAccountInfo", {});
+    }
+    /*manageAccountInfo({ commit, state }) {
+      this.$http.setHeader(localStorage.getItem("accessToken"));
+      this.$http.get();
+      commit("updateAccountInfo", payload);
+    }*/
+  }
 });
-console.log(store.state.count);
+
 export default store;

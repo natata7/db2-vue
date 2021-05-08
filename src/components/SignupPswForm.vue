@@ -3,7 +3,7 @@
 <main class="main">
         <section class="form-window">
             <h1 class="form-window__title">Complete your account</h1>
-            <form action="/add" method="post">
+            <form method="post">
                 <input @keyup="trigger"
                 type="password"
                 name="password"
@@ -49,7 +49,7 @@
                 <div class="button">
                     <div class="button__wrap">
                         <button
-                        @click="onSubmit"
+                        @click.prevent="onSubmit"
                         class="submit"
                         >Done!</button>
                     </div>
@@ -63,7 +63,7 @@
 // import cInput from '@/components/input.vue';
 // import cButton from '@/components/button.vue';
 import apiService from '../services/api';
-import router from '../router';
+// import router from '../router';
 
 export default {
   name: 'SignupPswForm',
@@ -163,22 +163,25 @@ export default {
         button.disabled = false;
       }
     },
-    async onSubmit(e) {
-      e.preventDefault();
-      await apiService.post('/complete', this.data)
+    async onSubmit() {
+      console.log(this.$store.state.account.fname);
+      const user = {
+        fname: this.$store.state.account.fname,
+        lname: this.$store.state.account.lname,
+        username: this.$store.state.account.username,
+        email: this.$store.state.account.email,
+        password: this.password,
+      };
+      await apiService.post('/complete', user)
         .then((res) => {
-          console.log(res.data);
+          console.log(res);
           this.$router.push('/succses');
         })
         .catch((err) => {
           alert(err.response.data);
         });
-      const user = {
-        password: this.password,
-      };
       window.localStorage.setItem('user', JSON.stringify(user));
       console.log(window.localStorage.getItem('user'));
-      router.push('/succses');
     },
     getPass(data) {
       this.password = data;

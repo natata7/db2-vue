@@ -14,7 +14,8 @@
                     <td></td>
                 </thead>
                 <tbody>
-                    <tr v-for="row in usersResponse" :key="row">
+                    <tr v-for="(row, index) in usersResponse.data"
+                    :key="row.id" v-on:delete-row="deleteThisRow(index)">
                         <td>{{ row.fname }}</td>
                         <td>{{ row.lname }}</td>
                         <td>{{ row.country }}</td>
@@ -22,10 +23,12 @@
                         <td>{{ row.level }}</td>
                         <td>{{ row.email }}</td>
                         <td>
-                            <div class="delete-user" v-bind:id="row.id">
-                                <a
+                            <div class="delete-user"
+                            v-bind:id="row.id">
+                                <a @click.prevent="onSubmit(row.id, index)"
+                                @click="$emit('delete-row')"
                                 v-bind:href="'/admin/' + row.id + '/delete/'" class="delete-link">
-                                    <img src="<%= BASE_URL %>./public/images/delete.svg" alt="">
+                                    <img :src="`${publicPath}images/delete.svg`" alt="">
                                 </a>
                             </div>
                         </td>
@@ -40,6 +43,7 @@
 <script>
 // @ is an alias to /src
 import Leftbar from '@/components/leftbar.vue';
+import apiService from '../services/api';
 
 export default {
   name: 'Admin',
@@ -53,10 +57,41 @@ export default {
   components: {
     Leftbar,
   },
+  data() {
+    return {
+      usersResponse: {
+        data: [],
+      },
+      publicPath: process.env.BASE_URL,
+    };
+  },
   mounted() {
-    const externalScript = document.createElement('script');
-    externalScript.setAttribute('src', 'https://cdn.jsdelivr.net/jquery/latest/jquery.min.js');
-    document.head.appendChild(externalScript);
+    apiService.get('/admin')
+      .then((res) => {
+        this.usersResponse = res;
+        console.log(res);
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  },
+  methods: {
+    async onSubmit(id, index) {
+      console.log(index);
+      await apiService.get(`/admin/${id}/delete/`)
+        .then((res) => {
+          console.log(res);
+          // this.$router.push('/admin');
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
+      this.usersResponse.data.splice(index, 1);
+    },
+    deleteThisRow(index) {
+      this.row.splice(index, 1);
+      console.log(index);
+    },
   },
 };
 </script>
