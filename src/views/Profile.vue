@@ -53,10 +53,19 @@
                                 <option value="Ms.">Ms.</option>
                             </select>
                         </div>
-                        <div class="input-wrap__row">
+                        <div class="input-wrap__row flag-row">
                             <label for="name">MOBILE PHONE</label>
-                            <input type="phone" name="phone" id="phone" placeholder="">
-                            <div class="input-phone"></div>
+                            <select name="flag" id="flag" class="flag">
+                                <option value="Singapore">🇸🇬</option>
+                                <option value="USA">🇺🇸</option>
+                                <option value="Canada">🇨🇦</option>
+                            </select>
+                            <input
+                                type="tel"
+                                id="mobile"
+                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                class="mobile input"
+                            />
                         </div>
                         <div class="input-wrap__row">
                             <label for="country">COUNTRY</label>
@@ -115,28 +124,8 @@ export default {
     };
   },
   mounted() {
-    apiService.get('/admin')
-      .then((res) => {
-        this.usersResponse = res;
-        console.log(res);
-      })
-      .catch((err) => {
-        alert(err.response.data);
-      });
   },
   methods: {
-    async onSubmit(id, index) {
-      console.log(index);
-      await apiService.get(`/admin/${id}/delete/`)
-        .then((res) => {
-          console.log(res);
-          // this.$router.push('/admin');
-        })
-        .catch((err) => {
-          alert(err.response.data);
-        });
-      this.usersResponse.data.splice(index, 1);
-    },
   },
 };
 </script>
@@ -318,5 +307,21 @@ a.change-pass{
         display: block;
         margin-left: 10px;
     }
+}
+.flag{
+    max-width: 16%;
+    margin-right: 20px;
+}
+.input-wrap__row.flag-row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    label{
+        width: 100%;
+    }
+}
+.mobile{
+    max-width: 79%;
 }
 </style>
