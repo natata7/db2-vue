@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
 <template>
   <div class="home">
     <Leftbar v-bind:searchActive="true" />
@@ -63,8 +67,10 @@
         </aside>
         <section class="search-results">
           <div class="search-results__control-elements">
-            <a href="" class="search-result__togler">Show map:</a>
-            <div class="sort active">
+            <span class="search-result__togler"
+            @click="showResult = !showResult"
+            >Show {{ showResult ? "map" : "results" }}:</span>
+            <div class="sort active" v-show="showResult">
               <div class="sort-ads">
                 <img :src="`${publicPath}images/sort-icon.svg`" alt="Sort" />
               </div>
@@ -76,177 +82,13 @@
               <label class="radio" for="byRating">by rating</label>
             </div>
           </div>
-          <div class="search-results__tiles active">
-            <div class="result__item">
-              <div class="tile-photo">
-                <img :src="`${publicPath}images/person_1.png`" alt="Avatar" />
-              </div>
-              <div class="text-wrap">
-                <div class="name">
-                  <h3>Richard Thompson</h3>
-                  <div class="star">
-                    <img :src="`${publicPath}images/star.svg`" alt="Star" />
-                  </div>
-                </div>
-                <div class="location">
-                  <img
-                    :src="`${publicPath}images/location-icon.svg`"
-                    alt="Location"
-                  />
-                  <p>Vancouver, Canada</p>
-                </div>
-                <div class="stack">
-                  <span>Stack: </span>
-                  <p>Python, Django, Sketch</p>
-                </div>
-                <div class="rate">
-                  <span>Base daily rate: </span>
-                  <p>$ 1,200 USD</p>
-                </div>
-              </div>
-            </div>
-            <div class="result__item">
-              <div class="tile-photo">
-                <img :src="`${publicPath}images/person_2.png`" alt="Avatar" />
-              </div>
-              <div class="text-wrap">
-                <div class="name">
-                  <h3>Richard Thompson</h3>
-                  <div class="star">
-                    <img :src="`${publicPath}images/star.svg`" alt="Star" />
-                  </div>
-                </div>
-                <div class="location">
-                  <img
-                    :src="`${publicPath}images/location-icon.svg`"
-                    alt="Location"
-                  />
-                  <p>Vancouver, Canada</p>
-                </div>
-                <div class="stack">
-                  <span>Stack: </span>
-                  <p>Python, Django, Sketch</p>
-                </div>
-                <div class="rate">
-                  <span>Base daily rate: </span>
-                  <p>$ 1,200 USD</p>
-                </div>
-              </div>
-            </div>
-            <div class="result__item">
-              <div class="tile-photo">
-                <img :src="`${publicPath}images/person_3.png`" alt="Avatar" />
-              </div>
-              <div class="text-wrap">
-                <div class="name">
-                  <h3>Richard Thompson</h3>
-                  <div class="star">
-                    <img :src="`${publicPath}images/star.svg`" alt="Star" />
-                  </div>
-                </div>
-                <div class="location">
-                  <img
-                    :src="`${publicPath}images/location-icon.svg`"
-                    alt="Location"
-                  />
-                  <p>Vancouver, Canada</p>
-                </div>
-                <div class="stack">
-                  <span>Stack: </span>
-                  <p>Python, Django, Sketch</p>
-                </div>
-                <div class="rate">
-                  <span>Base daily rate: </span>
-                  <p>$ 1,200 USD</p>
-                </div>
-              </div>
-            </div>
-            <div class="result__item">
-              <div class="tile-photo">
-                <img :src="`${publicPath}images/person_4.png`" alt="Avatar" />
-              </div>
-              <div class="text-wrap">
-                <div class="name">
-                  <h3>Richard Thompson</h3>
-                  <div class="star">
-                    <img :src="`${publicPath}images/star.svg`" alt="Star" />
-                  </div>
-                </div>
-                <div class="location">
-                  <img
-                    :src="`${publicPath}images/location-icon.svg`"
-                    alt="Location"
-                  />
-                  <p>Vancouver, Canada</p>
-                </div>
-                <div class="stack">
-                  <span>Stack: </span>
-                  <p>Python, Django, Sketch</p>
-                </div>
-                <div class="rate">
-                  <span>Base daily rate: </span>
-                  <p>$ 1,200 USD</p>
-                </div>
-              </div>
-            </div>
-            <div class="result__item">
-              <div class="tile-photo">
-                <img :src="`${publicPath}images/person_5.png`" alt="Avatar" />
-              </div>
-              <div class="text-wrap">
-                <div class="name">
-                  <h3>Richard Thompson</h3>
-                  <div class="star">
-                    <img :src="`${publicPath}images/star.svg`" alt="Star" />
-                  </div>
-                </div>
-                <div class="location">
-                  <img
-                    :src="`${publicPath}images/location-icon.svg`"
-                    alt="Location"
-                  />
-                  <p>Vancouver, Canada</p>
-                </div>
-                <div class="stack">
-                  <span>Stack: </span>
-                  <p>Python, Django, Sketch</p>
-                </div>
-                <div class="rate">
-                  <span>Base daily rate: </span>
-                  <p>$ 1,200 USD</p>
-                </div>
-              </div>
-            </div>
-            <div class="result__item">
-              <div class="tile-photo">
-                <img :src="`${publicPath}images/person_5.png`" alt="Avatar" />
-              </div>
-              <div class="text-wrap">
-                <div class="name">
-                  <h3>Richard Thompson</h3>
-                  <div class="star">
-                    <img :src="`${publicPath}images/star.svg`" alt="Star" />
-                  </div>
-                </div>
-                <div class="location">
-                  <img
-                    :src="`${publicPath}images/location-icon.svg`"
-                    alt="Location"
-                  />
-                  <p>Vancouver, Canada</p>
-                </div>
-                <div class="stack">
-                  <span>Stack: </span>
-                  <p>Python, Django, Sketch</p>
-                </div>
-                <div class="rate">
-                  <span>Base daily rate: </span>
-                  <p>$ 1,200 USD</p>
-                </div>
-              </div>
-            </div>
+          <div class="search-results__tiles active" v-show="showResult">
+            <result-card v-for="person in people"
+            :key="person.id"
+            :person="person">
+            </result-card>
           </div>
-          <div class="search-results__map">
+          <div class="search-results__map" v-show="!showResult">
             <div id="mapid" class="map"></div>
           </div>
         </section>
@@ -258,7 +100,7 @@
 <script>
 // @ is an alias to /src
 import cInput from '@/components/input.vue';
-// import Select from '@/components/select.vue';
+import resultCard from '@/components/resultCard.vue';
 import Leftbar from '@/components/leftbar.vue';
 import moment from 'moment';
 import DateRangePicker from 'vue2-daterange-picker';
@@ -276,7 +118,7 @@ export default {
   components: {
     Leftbar,
     cInput,
-    // Select,
+    resultCard,
     DateRangePicker,
   },
   filters: {
@@ -300,13 +142,58 @@ export default {
         show_ranges: false,
         autoApply: true,
       },
+      results: ['results', 'map'],
+      showResult: true,
+      people: [
+        {
+          id: 1,
+          fullName: 'Richard Thompson',
+        },
+        {
+          id: 2,
+          fullName: 'Martha Stewart',
+        },
+        {
+          id: 3,
+          fullName: 'Christina Ricci',
+        },
+        {
+          id: 4,
+          fullName: 'Angela Heerdegen',
+        },
+        {
+          id: 5,
+          fullName: 'James Pullman',
+        },
+      ],
     };
   },
   mounted() {
+    const externalCss = document.createElement('link');
+    externalCss.setAttribute(
+      'src',
+      'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css',
+    );
+    externalCss.setAttribute(
+      'integrity',
+      'sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==',
+    );
+    externalCss.setAttribute(
+      'crossorigin',
+      '',
+    );
     const externalScript = document.createElement('script');
     externalScript.setAttribute(
       'src',
-      'https://cdn.jsdelivr.net/jquery/latest/jquery.min.js',
+      'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
+    );
+    externalScript.setAttribute(
+      'integrity',
+      'sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==',
+    );
+    externalScript.setAttribute(
+      'crossorigin',
+      '',
     );
     const momentjs = document.createElement('script');
     momentjs.setAttribute(
@@ -330,7 +217,22 @@ export default {
       daterangepickercss,
     );
     // $('input[name="period"]').daterangepicker();
+    // eslint-disable-next-line no-undef
+    const mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    // eslint-disable-next-line no-undef
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: 'pk.eyJ1IjoibmF0czciLCJhIjoiY2ttamtkdDgwMHJzNjJ2bnoxN3RjMjZ5cCJ9.NIf79YnLXoEWKUFJ6ifirA',
+    }).addTo(mymap);
+    // eslint-disable-next-line no-undef
+    const marker = L.marker([51.5, -0.09]).addTo(mymap);
+    console.log(marker);
   },
+
   methods: {
     dateFormat(classes, date) {
       const today = moment();
@@ -404,10 +306,12 @@ export default {
     margin-bottom: 15px;
   }
 
-  a.search-result__togler {
+  span.search-result__togler {
     text-transform: uppercase;
     font-weight: 300;
     color: $text-color;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 1rem;
   }
 
   .show-map {
@@ -467,102 +371,7 @@ export default {
   }
 }
 
-.search-results__tiles {
-  margin: 15px 0;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-
-  @media (min-width: $screen-md) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
-  .result__item {
-    display: flex;
-    flex-direction: row;
-    background: #ffffff;
-    border: 1px solid rgba(237, 237, 237, 0.2);
-    box-sizing: border-box;
-    box-shadow: -2px 9px 30px rgba(23, 31, 76, 0.02);
-    border-radius: 2px;
-    transition: all 0.5s;
-    margin-right: 18px;
-    margin-bottom: 18px;
-    width: 330px;
-
-    &:hover {
-      box-shadow: none;
-      transition: all 0.5s;
-    }
-
-    .tile-photo {
-      width: 76px;
-      padding: 15px;
-
-      img {
-        width: 100%;
-      }
-    }
-
-    .text-wrap {
-      padding: 0 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      p,
-      span {
-        color: $color-black;
-        font-family: $main-font;
-        font-size: $font-size--xsm;
-      }
-
-      .name {
-        font-size: $font-size;
-        display: flex;
-        align-items: center;
-
-        h3 {
-          font-family: $main-font;
-          font-weight: 400;
-          font-size: $font-size;
-        }
-        .star {
-          margin: 0 2px;
-        }
-      }
-
-      .location {
-        display: flex;
-        align-items: center;
-        margin: 2px 0;
-
-        svg {
-          margin-right: 5px;
-        }
-      }
-      .stack,
-      .rate {
-        display: flex;
-        align-items: center;
-        margin: 2px 0;
-
-        span {
-          font-weight: 400;
-          margin-right: 5px;
-        }
-        p {
-          font-weight: 300;
-        }
-      }
-    }
-  }
-}
-
 .search-results__map {
-  display: none;
-
   .map {
     width: 100%;
     height: 59vh;

@@ -14,4 +14,5 @@ module.exports = {
     bucketName: 'db2-lecture',
     userPhotoFolder: 'users',
   },
+  mapbox_access_token: 'pk.eyJ1IjoibmF0czciLCJhIjoiY2ttamtkdDgwMHJzNjJ2bnoxN3RjMjZ5cCJ9.NIf79YnLXoEWKUFJ6ifirA',
 };

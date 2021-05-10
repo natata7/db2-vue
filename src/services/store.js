@@ -50,11 +50,6 @@ actions: {
       commit("setTokens", {});
       commit("updateAccountInfo", {});
     }
-    /*manageAccountInfo({ commit, state }) {
-      this.$http.setHeader(localStorage.getItem("accessToken"));
-      this.$http.get();
-      commit("updateAccountInfo", payload);
-    }*/
   }
 });
 
