@@ -9,6 +9,10 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Signup,
+    meta: {
+      breadcrumb: 'Home',
+      label: 'home',
+    },
   },
   {
     path: '/signup',
@@ -35,18 +39,35 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue'),
+    meta: {
+      breadcrumb: {
+        parent: 'home',
+        name: 'search',
+      },
+    },
   },
   {
     path: '/admin',
     name: 'Admin',
     component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue'),
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true,
+      breadcrumb: {
+        parent: 'home',
+      },
+    },
   },
   {
     path: '/profile',
     name: 'Profile',
     component: () => import(/* webpackChunkName: "admin" */ '../views/Profile.vue'),
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true,
+      breadcrumb: {
+        label: 'My profile',
+        parent: 'home',
+      },
+    },
   },
 ];
 

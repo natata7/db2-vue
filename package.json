@@ -13,6 +13,7 @@
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
+    "vue-2-crumbs": "^0.5.4",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.2.0",
     "vue2-daterange-picker": "^0.6.5",

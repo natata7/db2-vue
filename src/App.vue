@@ -4,7 +4,7 @@
     <div id="nav">
       <router-link to="/">Signup</router-link> |
       <router-link to="/signin">Signin</router-link> |
-      <router-link to="/complete">Complete</router-link> |
+      <router-link to="/signup-complete">Complete</router-link> |
       <router-link to="/succses">Succses</router-link> |
       <router-link to="/admin">Admin</router-link> |
       <router-link to="/profile">Profile</router-link> |

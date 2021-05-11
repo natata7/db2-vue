@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  runtimeCompiler: true,
   css: {
     requireModuleExtension: false,
   },

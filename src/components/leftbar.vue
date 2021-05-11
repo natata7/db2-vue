@@ -31,10 +31,7 @@
 
     <header class="profile-header">
         <div class="top-bar">
-            <ul class="breadcrumbs">
-                <li class="breadcrumbs-item">Home</li>
-                <li class="breadcrumbs-item">My profile</li>
-            </ul>
+            <crumbs/>
             <a class="profile-name">Faruh Bernandez</a>
         </div>
     </header>
@@ -42,8 +39,13 @@
 </template>
 
 <script>
+import crumbs from '@/components/breadcrumbs.vue';
+
 export default {
   name: 'Leftbar',
+  components: {
+    crumbs,
+  },
   props: {
     searchActive: Boolean,
     profileActive: Boolean,
@@ -141,32 +143,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #DAE4F2;
-}
-
-.breadcrumbs{
-    display: flex;
-    height: 100%;
-    margin: 0;
-
-    .breadcrumbs-item{
-        list-style: none;
-        align-self: center;
-        display: flex;
-        align-items: center;
-        padding-right: 10px;
-
-        &::after{
-            background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6px" height="9px" viewBox="0 0 6 9" fill="none"><path d="M1.13514 -0.000183105L4.85176e-08 0.985687L3.72973 4.22498L4.85176e-08 7.46426L1.13514 8.45014L6 4.22498L1.13514 -0.000183105Z" fill="%230AD69C"/></svg>');
-            width: 6px;
-            content: '';
-            height: 8px;
-            display: block;
-            margin-left: 10px;
-        }
-        &:last-of-type::after{
-            display: none;
-        }
-    }
 }
 
 .profile-name{
