@@ -6,12 +6,16 @@ class ApiService {
     this.http.defaults.baseURL = 'http://localhost:3001';
   }
 
-  get(url) {
-    return this.http.get(url);
+  get(url, options = {}) {
+    return this.http.get(url, { ...options });
   }
 
   post(url, body) {
     return this.http.post(url, body);
+  }
+
+  put(url, body) {
+    return this.http.put(url, body);
   }
 }
 

@@ -6,7 +6,7 @@ import ApiService from './api';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+export const store = new Vuex.Store({
   state: {
     status: '',
     account: {
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     },
   },
   getters: {
-    isAuthenticated: (state) => !!state.token,
+    isAuthenticated: (state) => !!state.tokens,
     authStatus: (state) => state.status,
     loggedIn: (state) => { return Object.keys(state.tokens).filter((key) => !!state.tokens[key]).length },
   },
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
     },
     pushErrors(state, payload) {
       state.errors = [...payload];
-    }
+    },
   },
 actions: {
     login({ commit }, payload) {
@@ -49,8 +49,6 @@ actions: {
       localStorage.removeItem("refreshToken");
       commit("setTokens", {});
       commit("updateAccountInfo", {});
-    }
+    },
   }
 });
-
-export default store;

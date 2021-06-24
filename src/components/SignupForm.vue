@@ -3,32 +3,49 @@
         <section class="form-window">
             <h1 class="form-window__title">Sign up</h1>
             <form method="post">
+                <p v-if="isError" id="errorBlock">{{errorMsg}}</p>
                 <div class="input-wrap__row">
-                    <cInput
+                    <input
+                    required
                     id="name"
                     type="name"
                     v-model="fname"
                     v-on:change-my-input="getName"
                     placeholder="Your name" />
-                    <cInput
+                    <input
                     type="last name"
                     id="lastname"
                     v-model="lname"
                     v-on:change-my-input="getSurname"
                     placeholder="Last Name" />
                 </div>
-                <cInput
+  <p class="errorBlock"
+  v-if="!$v.fname.minLength">
+  Name or surname must have at least {{$v.fname.$params.minLength.min}} letters.</p>
+                <input
                     id="username"
                     type="username"
                     v-model="username"
                     v-on:change-my-input="getUsername"
                     placeholder="Username" />
-                <cInput
+                    <p class="errorBlock"
+  v-if="!$v.username.minLength">
+  Username must have at least {{$v.username.$params.minLength.min}} letters.</p>
+                    <div :class="{ 'form-group-error' : this.$v.email.$error }">
+                <input
                     id="email"
                     type="email"
                     v-model="email"
                     v-on:change-my-input="getEmail"
                     placeholder="E-mail" />
+                    <p class="errorBlock"
+  v-if="!$v.email">
+  Please fill the correctly email.</p>
+                    </div>
+
+                      <p class="errorBlock"
+                      v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
+  <p class="errorBlock" v-if="submitStatus === 'PENDING'">Sending...</p>
                 <div class="button">
                     <div class="button__wrap">
                         <button
@@ -37,6 +54,7 @@
                         title="Get started"
                         >Get started</button>
                     </div>
+
                 </div>
             </form>
         </section>
@@ -44,10 +62,15 @@
 </template>
 
 <script>
-import cInput from '@/components/input.vue';
+// import cInput from '@/components/input.vue';
 // import cButton from '@/components/button.vue';
 // import apiService from '../services/api';
 // import router from '../router';
+import { required, minLength } from 'vuelidate/lib/validators';
+import Vue from 'vue';
+import Vuelidate from 'vuelidate';
+
+Vue.use(Vuelidate);
 
 export default {
   name: 'signup',
@@ -55,7 +78,7 @@ export default {
 
   },
   components: {
-    cInput,
+    // cInput,
     // cButton,
   },
   data() {
@@ -64,7 +87,27 @@ export default {
       lname: '',
       username: '',
       email: '',
+      errorMsg: '',
+      submitStatus: '',
     };
+  },
+
+  validations: {
+    fname: {
+      required,
+      minLength: minLength(4),
+    },
+    lname: {
+      required,
+      minLength: minLength(4),
+    },
+    username: {
+      required,
+      minLength: minLength(4),
+    },
+    email: {
+      email: minLength(4),
+    },
   },
   methods: {
     async onSubmit() {
@@ -74,14 +117,19 @@ export default {
         username: this.username,
         email: this.email,
       };
-      console.log(user);
-      this.$store.commit('userInfo', {
-        fname: this.fname,
-        lname: this.lname,
-        username: this.username,
-        email: this.email,
-      });
-      this.$router.push('/signup-complete');
+      console.log('submit!');
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR';
+      } else {
+        console.log(user);
+        this.$store.commit('updateAccountInfo', {
+          fname: this.fname,
+          lname: this.lname,
+          username: this.username,
+          email: this.email,
+        });
+        this.$router.push('/signup-complete');
       //   await apiService.post('/add', user)
       //     .then((res) => {
       //       console.log(res);
@@ -92,12 +140,16 @@ export default {
       //     });
       // window.localStorage.setItem('user', JSON.stringify(user));
       // console.log(window.localStorage.getItem('user'));
+      }
     },
     getName(data) {
       this.fname = data;
+      this.$v.fname.$touch();
     },
     getSurname(data) {
       this.lname = data;
+      this.$v.lname.$touch();
+      console.log(this.$v);
     },
     getUsername(data) {
       this.username = data;
@@ -105,11 +157,19 @@ export default {
     getEmail(data) {
       this.email = data;
     },
+    setError(text) {
+      this.errorMsg = text;
+    },
+  },
+  computed: {
+    isError() {
+      return this.errorMsg !== '';
+    },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
 .form-window{
     box-sizing: border-box;
@@ -314,7 +374,7 @@ button.submit{
     background-color: #ff4757;
 }
 
-#errorBlock {
+.errorBlock {
     color: #ff4757;
     font-size: $font-size--xsm;
 }
@@ -328,4 +388,102 @@ button.submit{
 .indicator span.green:before{
     background-color: #23ad5c;
 }
+.form-group__message, .error {
+  font-size: 0.75rem;
+  line-height: 1;
+  display: none;
+  margin-left: 14px;
+  margin-top: -1.6875rem;
+  margin-bottom: 0.9375rem; }
+
+.form-group--alert,
+.form-group--error {
+  animation-name: shakeError;
+  animation-fill-mode: forwards;
+  animation-duration: .6s;
+  animation-timing-function: ease-in-out; }
+
+.form-group--loading .form__input {
+  border-image-slice: 1;
+  animation: loading-frame 1s infinite; }
+
+@keyframes loading-frame {
+  0% {
+    border-color: #3acfd5; }
+  50% {
+    border-color: #3a4ed5; }
+  100% {
+    border-color: #3acfd5; } }
+
+.form-group--success .form__label, .form-group--success .form__label--inline {
+  color: #43AC6A; }
+
+.form-group--success .form-group__addon {
+  color: white;
+  border-color: #85d0a1;
+  background: #85d0a1; }
+
+.form-group--success input,
+.form-group--success textarea,
+.form-group--success input:focus,
+.form-group--success input:hover {
+  border-color: #85d0a1; }
+
+.form-group--success + .form-group__message, .form-group--success + .error {
+  display: block;
+  color: #73c893; }
+
+.form-group--error .form__label, .form-group--error .form__label--inline {
+  color: #f04124; }
+
+.form-group--error .form-group__addon {
+  color: white;
+  border-color: #f79483;
+  background: #f79483; }
+
+.form-group--error input,
+.form-group--error textarea,
+.form-group--error input:focus,
+.form-group--error input:hover {
+  border-color: #f79483; }
+
+.form-group--error + .form-group__message, .form-group--error + .error {
+  display: block;
+  color: #f57f6c; }
+
+.form-group--alert .form__label, .form-group--alert .form__label--inline {
+  color: #f08a24; }
+
+.form-group--alert .form-group__addon {
+  color: white;
+  border-color: #f7bd83;
+  background: #f7bd83; }
+
+.form-group--alert input,
+.form-group--alert textarea,
+.form-group--alert input:focus,
+.form-group--alert input:hover {
+  border-color: #f7bd83; }
+
+.form-group--alert + .form-group__message {
+  display: block;
+  color: #f5b06c; }
+
+@keyframes shakeError {
+  0% {
+    transform: translateX(0); }
+  15% {
+    transform: translateX(0.375rem); }
+  30% {
+    transform: translateX(-0.375rem); }
+  45% {
+    transform: translateX(0.375rem); }
+  60% {
+    transform: translateX(-0.375rem); }
+  75% {
+    transform: translateX(0.375rem); }
+  90% {
+    transform: translateX(-0.375rem); }
+  100% {
+    transform: translateX(0); } }
 </style>

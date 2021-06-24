@@ -72,7 +72,7 @@ export default {
         console.log(res);
       })
       .catch((err) => {
-        alert(err.response.data);
+        alert(err.response);
       });
   },
   methods: {

@@ -60,10 +60,14 @@
 </template>
 
 <script>
+import { required, minLength } from 'vuelidate/lib/validators';
+import Vue from 'vue';
+import Vuelidate from 'vuelidate';
 // import cInput from '@/components/input.vue';
 // import cButton from '@/components/button.vue';
 import apiService from '../services/api';
 // import router from '../router';
+Vue.use(Vuelidate);
 
 export default {
   name: 'SignupPswForm',
@@ -81,6 +85,12 @@ export default {
       termsOfService: true,
       privacyPolicy: true,
     };
+  },
+  validations: {
+    password: {
+      required,
+      minLength: minLength(8),
+    },
   },
   methods: {
     trigger() {
@@ -164,15 +174,20 @@ export default {
       }
     },
     async onSubmit() {
-      console.log(this.$store.state.account.fname);
+      console.log(this.$store);
       const user = {
-        fname: this.$store.state.account.fname,
-        lname: this.$store.state.account.lname,
-        username: this.$store.state.account.username,
-        email: this.$store.state.account.email,
+        fname: this.$store.state.auth.account.fname,
+        lname: this.$store.state.auth.account.lname,
+        username: this.$store.state.auth.account.username,
+        email: this.$store.state.auth.account.email,
         password: this.password,
       };
-      await apiService.post('/complete', user)
+      if (!user.fname || !user.lname || !user.username || !user.email) {
+        const errorBlock = document.querySelector('#errorBlock');
+        errorBlock.innerHTML = 'Somethink wrong';
+        return;
+      }
+      await apiService.post('/add', user)
         .then((res) => {
           console.log(res);
           this.$router.push('/succses');

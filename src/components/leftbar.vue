@@ -32,7 +32,8 @@
     <header class="profile-header">
         <div class="top-bar">
             <crumbs/>
-            <a class="profile-name">Faruh Bernandez</a>
+            <a class="profile-name">{{ `${user.fname} ${user.lname}` }}</a>
+            <span v-if="isAuthenticated"> | <a @click="logout">Logout</a></span>
         </div>
     </header>
     </div>
@@ -40,6 +41,9 @@
 
 <script>
 import crumbs from '@/components/breadcrumbs.vue';
+// import { mapState } from 'vuex';
+// eslint-disable-next-line no-unused-vars
+// import store from '../services/store';
 
 export default {
   name: 'Leftbar',
@@ -51,11 +55,35 @@ export default {
     profileActive: Boolean,
     messagesActive: Boolean,
     calendarActive: Boolean,
+    isAuthenticated: Boolean,
   },
   data() {
     return {
       publicPath: process.env.BASE_URL,
+      // user: this.$store.user,
     };
+  },
+  computed: {
+    user() {
+      console.log(this.$store.state.account);
+      return this.$store.state.account;
+    },
+  },
+  //   computed: mapState({ user: (state) => state.auth.account.data.user }),
+  //   mounted() {
+  //     console.log(this.$store.state.account);
+  //   },
+  methods: {
+    logout1() {
+      this.$store.dispatch('logout');
+    },
+    logout() {
+      // eslint-disable-next-line no-undef
+      this.$store.dispatch(AUTH_LOGOUT)
+        .then(() => {
+          this.$router.push('/signin');
+        });
+    },
   },
 };
 </script>

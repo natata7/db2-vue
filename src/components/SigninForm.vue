@@ -7,13 +7,16 @@
                 type="email"
                 name="email"
                 id="email"
+                @focus="clearError"
                 v-model="email"
                 v-on:change-my-input="getEmail"
                 placeholder="Your email" />
+                <p v-if="isError" id="errorBlock">{{errorMsg}}</p>
                 <cInput
                 type="password"
                 name="password"
                 id="password"
+                @focus="clearError"
                 v-model="password"
                 v-on:change-my-input="getPassword"
                 placeholder="Your password"/>
@@ -32,12 +35,13 @@
 <script>
 import cInput from '@/components/input.vue';
 import apiService from '../services/api';
-import store from '../services/store';
+// eslint-disable-next-line no-unused-vars
+import store from '../store/index';
+import { AUTH_REQUEST } from '../store/actions/auth';
 
 export default {
   name: 'signin',
   props: {
-
   },
   components: {
     cInput,
@@ -46,10 +50,11 @@ export default {
     return {
       email: '',
       password: '',
+      errorMsg: '',
     };
   },
   methods: {
-    async login() {
+    async login1() {
       // const user = this.$store.getters.accountInfo;
       await apiService.post('/auth', {
         email: this.email,
@@ -57,30 +62,46 @@ export default {
       })
         .then(
           (response) => {
-            const { accessToken, refreshToken } = response.data;
+            const { accessToken, refreshToken } = response.data.tokens;
             this.$store
               .dispatch('login', {
-                account: response.data.user,
+                account: response.data,
                 tokens: {
                   access: accessToken,
                   refresh: refreshToken,
                 },
               })
               .then(() => this.$router.replace(this.$route.query.redirect || '/profile'));
+            console.log(response.data.tokens.accessToken);
+            console.log(response.data.email);
           },
-        );
-    },
-    login1() {
-      const { email, password } = this;
-      this.$store.dispatch(store.AUTH_REQUEST, { email, password }).then(() => {
-        this.$router.push('/profile');
-      });
+        )
+        .catch((error) => this.setError(error));
     },
     getEmail(data) {
       this.email = data;
     },
     getPassword(data) {
       this.password = data;
+    },
+    setError(error) {
+      this.errorMsg = error.response.data.error.message;
+    },
+    clearError() {
+      this.errorCode = '';
+    },
+    login() {
+      const { email, password } = this;
+      // eslint-disable-next-line no-undef
+      this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
+        this.$router.push('/profile');
+      })
+        .catch((error) => this.setError(error));
+    },
+  },
+  computed: {
+    isError() {
+      return this.errorMsg !== '';
     },
   },
 };
@@ -313,5 +334,10 @@ button.submit{
 .indicator span.strong:before,
 .indicator span.green:before{
     background-color: #23ad5c;
+}
+#errorBlock{
+    color: #ff4757;
+    font-size: 0.75rem;
+    margin-bottom: 25px;
 }
 </style>

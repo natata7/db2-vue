@@ -29,10 +29,14 @@
                             type="file"
                             id="file"
                             accept="image/*"
-                            @change="true"
+                            @click="handleFileUpload"
                             hidden
                         />
                         </label>
+                        <label>File
+        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+      </label>
+      <button v-on:click="submitFile()">Submit</button>
                     </div>
                     <form action="">
                         <div class="input-wrap__row">
@@ -121,12 +125,45 @@ export default {
       informationTabs: ["personal", "account"],
       showInformationTab: "personal",
       publicPath: process.env.BASE_URL,
+      file: '',
     };
   },
   mounted() {
+      const auth = {
+        headers: { Authorization: `JWT ${this.state.tokens.accessToken}` },
+    }
+      console.log(this.$store.state.auth.tokens.accessToken);
+    apiService.get('/profile1', auth,)
+      .then((res) => {
+        this.usersResponse = res;
+        console.log('res');
+      })
+      .catch((err) => {
+        alert(err.response);
+      });
   },
   methods: {
-  },
+  submitFile(){
+            let formData = new FormData();
+            formData.append('file', this.file);
+            apiService.put( '/photo',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            ).then(function(){
+          console.log('SUCCESS!!');
+        })
+        .catch(function(){
+          console.log('FAILURE!!');
+        });
+      },
+      handleFileUpload(){
+        this.file = this.$refs.file.files[0];
+      }
+    }
 };
 </script>
 

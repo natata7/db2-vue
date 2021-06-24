@@ -2,7 +2,7 @@
   <div id="app">
       <router-view/>
     <div id="nav">
-      <router-link to="/">Signup</router-link> |
+      <router-link to="/signup">Signup</router-link> |
       <router-link to="/signin">Signin</router-link> |
       <router-link to="/signup-complete">Complete</router-link> |
       <router-link to="/succses">Succses</router-link> |
@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import store from './services/store';
+import { USER_REQUEST } from './store/actions/user';
+// import apiService from './services/api';
 
 export default {
   name: 'App',
@@ -22,9 +23,14 @@ export default {
     title: 'Home',
     titleTemplate: '%s | DB2 app',
   },
+  //   created() {
+  //     if (this.$store.getters.isAuthenticated) {
+  //       this.$store.dispatch(store.updateAccountInfo);
+  //     }
+  //   },
   created() {
     if (this.$store.getters.isAuthenticated) {
-      this.$store.dispatch(store.USER_REQUEST);
+      this.$store.dispatch(USER_REQUEST);
     }
   },
 };
